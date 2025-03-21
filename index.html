@@ -8,37 +8,37 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: black;
-            position: relative;
+            background: linear-gradient(135deg, #1a1a1a, #3c3c3c, #121212);
+            animation: gradientBackground 10s infinite alternate ease-in-out;
         }
+
+        @keyframes gradientBackground {
+            0% { background: linear-gradient(135deg, #1a1a1a, #3c3c3c, #121212); }
+            100% { background: linear-gradient(135deg, #0d0d0d, #444444, #222222); }
+        }
+
         canvas {
             display: block;
-            background: #222;
         }
+
         .background-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 100px;
+            font-size: 150px;
             font-weight: bold;
-            color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.05);
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1);
             user-select: none;
             pointer-events: none;
             z-index: -1;
-            text-shadow: 5px 5px 15px rgba(255, 255, 255, 0.2);
-            font-family: 'Arial', sans-serif;
-            animation: floatText 5s infinite alternate ease-in-out;
-        }
-        
-        @keyframes floatText {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -48%) scale(1.1); }
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
 <body>
-    <div class="background-text">Yash.com</div>
+    <div class="background-text">The Yash Breaker</div>
     <canvas id="gameCanvas"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
