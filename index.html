@@ -34,20 +34,20 @@
         };
 
         const paddle = {
-            width: 100,
+            width: 120,
             height: 10,
-            x: (canvas.width - 100) / 2,
-            dx: 5
+            x: (canvas.width - 120) / 2,
+            dx: 10
         };
 
         const bricks = [];
         const brickRowCount = 3;
         const brickColumnCount = 5;
-        const brickWidth = 100;
-        const brickHeight = 30;
-        const brickPadding = 10;
+        const brickWidth = 140;
+        const brickHeight = 40;
+        const brickPadding = 15;
         const brickOffsetTop = 50;
-        const brickOffsetLeft = 30;
+        const brickOffsetLeft = 50;
 
         for (let c = 0; c < brickColumnCount; c++) {
             bricks[c] = [];
@@ -80,8 +80,8 @@
                         ctx.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
                         ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
                         ctx.fillStyle = "black";
-                        ctx.font = "14px Arial";
-                        ctx.fillText("Yashas is the GOAT", brickX + 10, brickY + 20);
+                        ctx.font = "16px Arial";
+                        ctx.fillText("Yashas is the GOAT", brickX + 10, brickY + 25);
                     }
                 }
             }
@@ -140,8 +140,19 @@
             }
         });
 
+        canvas.addEventListener("mousemove", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            let mouseX = e.clientX - rect.left;
+            paddle.x = Math.max(0, Math.min(canvas.width - paddle.width, mouseX - paddle.width / 2));
+        });
+
+        canvas.addEventListener("touchmove", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            let touchX = e.touches[0].clientX - rect.left;
+            paddle.x = Math.max(0, Math.min(canvas.width - paddle.width, touchX - paddle.width / 2));
+        });
+
         draw();
     </script>
 </body>
 </html>
-
