@@ -34,20 +34,20 @@
         };
 
         const paddle = {
-            width: 120,
+            width: Math.max(100, canvas.width * 0.2),
             height: 10,
-            x: (canvas.width - 120) / 2,
+            x: (canvas.width - Math.max(100, canvas.width * 0.2)) / 2,
             dx: 10
         };
 
         const bricks = [];
-        const brickRowCount = 3;
-        const brickColumnCount = 5;
-        const brickWidth = 140;
+        const brickRowCount = 4;
+        const brickColumnCount = Math.floor(canvas.width / 160);
+        const brickWidth = canvas.width / brickColumnCount - 10;
         const brickHeight = 40;
-        const brickPadding = 15;
+        const brickPadding = 10;
         const brickOffsetTop = 50;
-        const brickOffsetLeft = 50;
+        const brickOffsetLeft = 20;
 
         for (let c = 0; c < brickColumnCount; c++) {
             bricks[c] = [];
@@ -70,6 +70,10 @@
         }
 
         function drawBricks() {
+            ctx.font = "14px Arial";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "black";
+
             for (let c = 0; c < brickColumnCount; c++) {
                 for (let r = 0; r < brickRowCount; r++) {
                     if (bricks[c][r].status === 1) {
@@ -77,11 +81,10 @@
                         let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
                         bricks[c][r].x = brickX;
                         bricks[c][r].y = brickY;
-                        ctx.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
+                        ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 70%)`;
                         ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
                         ctx.fillStyle = "black";
-                        ctx.font = "16px Arial";
-                        ctx.fillText("Yashas is the GOAT", brickX + 10, brickY + 25);
+                        ctx.fillText("Yashas is the GOAT", brickX + brickWidth / 2, brickY + brickHeight / 2 + 5);
                     }
                 }
             }
