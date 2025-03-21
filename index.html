@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yashas is the GOAT</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        .text {
+            position: absolute;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="text" id="movingText">Yashas is the GOAT</div>
+    <script>
+        const text = document.getElementById('movingText');
+        let x = 100, y = 100;
+        let dx = 2, dy = 2;
+
+        function changeColor() {
+            text.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        }
+
+        function moveText() {
+            const maxX = window.innerWidth - text.clientWidth;
+            const maxY = window.innerHeight - text.clientHeight;
+
+            if (x <= 0 || x >= maxX) {
+                dx *= -1;
+                changeColor();
+            }
+            if (y <= 0 || y >= maxY) {
+                dy *= -1;
+                changeColor();
+            }
+
+            x += dx;
+            y += dy;
+
+            text.style.transform = `translate(${x}px, ${y}px)`;
+            requestAnimationFrame(moveText);
+        }
+
+        moveText();
+    </script>
+</body>
+</html>
+
