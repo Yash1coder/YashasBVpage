@@ -3,54 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yashas is the GOAT</title>
+    <title>Yashas Block Breaker</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background-color: black;
         }
-        .text {
-            position: absolute;
-            font-size: 3rem;
-            font-weight: bold;
-            color: white;
-            user-select: none;
+        canvas {
+            display: block;
+            background: #222;
         }
     </style>
 </head>
 <body>
-    <div class="text" id="movingText">Yashas is the GOAT</div>
+    <canvas id="gameCanvas"></canvas>
     <script>
-        const text = document.getElementById('movingText');
-        let x = 100, y = 100;
-        let dx = 2, dy = 2;
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-        function changeColor() {
-            text.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            radius: 10,
+            dx: 3,
+            dy: -3
+        };
+
+        const paddle = {
+            width: 100,
+            height: 10,
+            x: (canvas.width - 100) / 2,
+            dx: 5
+        };
+
+        const bricks = [];
+        const brickRowCount = 3;
+        const brickColumnCount = 5;
+        const brickWidth = 100;
+        const brickHeight = 30;
+        const brickPadding = 10;
+        const brickOffsetTop = 50;
+        const brickOffsetLeft = 30;
+
+        for (let c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
         }
 
-        function moveText() {
-            const maxX = window.innerWidth - text.clientWidth;
-            const maxY = window.innerHeight - text.clientHeight;
-
-            if (x <= 0 || x >= maxX) {
-                dx *= -1;
-                changeColor();
-            }
-            if (y <= 0 || y >= maxY) {
-                dy *= -1;
-                changeColor();
-            }
-
-            x += dx;
-            y += dy;
-
-            text.style.transform = `translate(${x}px, ${y}px)`;
-            requestAnimationFrame(moveText);
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.closePath();
         }
 
-        moveText();
+        function drawPaddle() {
+            ctx.fillStyle = "white";
+            ctx.fillRect(paddle.x, canvas.height - paddle.height - 10, paddle.width, paddle.height);
+        }
+
+        function drawBricks() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {
+                        let brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                        let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        ctx.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
+                        ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+                        ctx.fillStyle = "black";
+                        ctx.font = "14px Arial";
+                        ctx.fillText("Yashas is the GOAT", brickX + 10, brickY + 20);
+                    }
+                }
+            }
+        }
+
+        function collisionDetection() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    let b = bricks[c][r];
+                    if (b.status === 1) {
+                        if (ball.x > b.x && ball.x < b.x + brickWidth && ball.y > b.y && ball.y < b.y + brickHeight) {
+                            ball.dy *= -1;
+                            b.status = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        function update() {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+                ball.dx *= -1;
+            }
+            if (ball.y - ball.radius < 0) {
+                ball.dy *= -1;
+            }
+            if (ball.y + ball.radius > canvas.height) {
+                document.location.reload();
+            }
+
+            if (ball.y + ball.radius > canvas.height - paddle.height - 10 &&
+                ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+                ball.dy *= -1;
+            }
+
+            collisionDetection();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            drawPaddle();
+            update();
+            requestAnimationFrame(draw);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft" && paddle.x > 0) {
+                paddle.x -= paddle.dx;
+            } else if (e.key === "ArrowRight" && paddle.x < canvas.width - paddle.width) {
+                paddle.x += paddle.dx;
+            }
+        });
+
+        draw();
     </script>
 </body>
 </html>
