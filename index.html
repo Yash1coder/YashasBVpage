@@ -26,7 +26,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 10vw; /* Scales text size relative to screen width */
+            font-size: 150px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.05);
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1);
@@ -44,14 +44,8 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Responsive canvas sizing
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
         const ball = {
             x: canvas.width / 2,
@@ -70,7 +64,7 @@
 
         const bricks = [];
         const brickRowCount = 4;
-        const brickColumnCount = Math.floor(canvas.width / 120); // Adjusted for mobile
+        const brickColumnCount = Math.floor(canvas.width / 160);
         const brickWidth = canvas.width / brickColumnCount - 10;
         const brickHeight = 40;
         const brickPadding = 10;
@@ -98,7 +92,7 @@
         }
 
         function drawBricks() {
-            ctx.font = `${brickHeight / 2}px Arial`;
+            ctx.font = "14px Arial";
             ctx.textAlign = "center";
             ctx.fillStyle = "black";
 
